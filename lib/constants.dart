@@ -36,3 +36,11 @@ var KFilterChipBorder = RoundedRectangleBorder(
 
 var KProductCardBlueColor = Color.fromRGBO(216, 240, 253, 1);
 var KProductCardWhiteColor = Color.fromRGBO(245, 247, 249, 1);
+Color KSelectedChipColor = KPrimaryColor;
+Color KChipColor = Color.fromRGBO(233, 233, 233, 1);
+
+var KPrimaryButtonStyle = ButtonStyle(
+  minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
+  foregroundColor: MaterialStateProperty.all(Colors.black),
+  backgroundColor: MaterialStateProperty.all(KPrimaryColor),
+);

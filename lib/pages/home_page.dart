@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/available_products.dart';
+import 'package:shopping_app/data/available_products.dart';
 import 'package:shopping_app/constants.dart';
-import 'package:shopping_app/filters_chip.dart';
-import 'package:shopping_app/product_card.dart';
+import 'package:shopping_app/reusable_widgets/filters_chip.dart';
+import 'package:shopping_app/reusable_widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,12 +19,10 @@ class _HomePageState extends State<HomePage> {
     "Beta",
   ];
 
-  int selectedChip = 0;
+  int _selectedChip = 0;
 
   @override
   Widget build(BuildContext context) {
-    Color KChipColor = Color.fromRGBO(245, 247, 249, 1);
-    Color KSelectedChipColor = Theme.of(context).primaryColor;
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -71,12 +69,12 @@ class _HomePageState extends State<HomePage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedChip = index;
+                          _selectedChip = index;
                         });
                       },
                       child: FiltersChip(
                         text: filters[index],
-                        color: index == selectedChip
+                        color: index == _selectedChip
                             ? KSelectedChipColor
                             : KChipColor,
                       ),
@@ -87,7 +85,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: 11,
+                itemCount: availableProducts.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(22.0),

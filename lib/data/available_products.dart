@@ -1,4 +1,4 @@
-import 'package:shopping_app/product.dart';
+import 'package:shopping_app/data/product.dart';
 
 List<Product> availableProducts = [
   Product(

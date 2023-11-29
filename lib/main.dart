@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/data/available_products.dart';
 import 'package:shopping_app/constants.dart';
-import 'package:shopping_app/home_page.dart';
+import 'package:shopping_app/pages/home_page.dart';
+import 'package:shopping_app/pages/product_details_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,11 +22,13 @@ class MyApp extends StatelessWidget {
           primary: KPrimaryColor,
         ),
         inputDecorationTheme: InputDecorationTheme(
-          prefixIconColor: Color.fromRGBO(119, 119, 119, 1),
+          prefixIconColor: Color.fromRGBO(156, 156, 156, 1),
         ),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: ProductDetailsPage(
+        product: availableProducts[7],
+      ),
     );
   }
 }
