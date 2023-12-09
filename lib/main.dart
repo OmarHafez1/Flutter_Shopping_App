@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/data/available_products.dart';
 import 'package:shopping_app/constants.dart';
+import 'package:shopping_app/pages/app_bottom_navigator.dart';
 import 'package:shopping_app/pages/home_page.dart';
 import 'package:shopping_app/pages/product_details_page.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Shopping app',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: KPrimaryColor,
@@ -26,9 +27,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: ProductDetailsPage(
-        product: availableProducts[7],
-      ),
+      home: AppBottomNavigator(),
     );
   }
 }

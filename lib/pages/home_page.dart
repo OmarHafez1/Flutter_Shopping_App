@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/data/available_products.dart';
 import 'package:shopping_app/constants.dart';
+import 'package:shopping_app/pages/product_details_page.dart';
 import 'package:shopping_app/reusable_widgets/filters_chip.dart';
 import 'package:shopping_app/reusable_widgets/product_card.dart';
 
@@ -89,13 +90,26 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(22.0),
-                    child: ProductCard(
-                      title: availableProducts[index].title,
-                      price: availableProducts[index].price.toString(),
-                      color: index.isEven
-                          ? KProductCardBlueColor
-                          : KProductCardWhiteColor,
-                      imagePath: availableProducts[index].imagePath,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ProductDetailsPage(
+                                product: availableProducts[index],
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: ProductCard(
+                        title: availableProducts[index].title,
+                        price: availableProducts[index].price.toString(),
+                        color: index.isEven
+                            ? KProductCardBlueColor
+                            : KProductCardWhiteColor,
+                        imagePath: availableProducts[index].imagePath,
+                      ),
                     ),
                   );
                 },
