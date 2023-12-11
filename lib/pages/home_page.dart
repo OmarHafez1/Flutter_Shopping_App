@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/data/available_products.dart';
 import 'package:shopping_app/constants.dart';
+import 'package:shopping_app/data/product.dart';
 import 'package:shopping_app/pages/product_details_page.dart';
 import 'package:shopping_app/reusable_widgets/filters_chip.dart';
 import 'package:shopping_app/reusable_widgets/product_card.dart';
@@ -20,10 +21,12 @@ class _HomePageState extends State<HomePage> {
     "Beta",
   ];
 
-  int _selectedChip = 0;
+  int _selectedFilter = 0;
 
   @override
   Widget build(BuildContext context) {
+    List<Product> filteredListOfAvailableProducts =
+        getFilteredListOfAvailableProducts();
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -70,12 +73,12 @@ class _HomePageState extends State<HomePage> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _selectedChip = index;
+                          _selectedFilter = index;
                         });
                       },
                       child: FiltersChip(
                         text: filters[index],
-                        color: index == _selectedChip
+                        color: index == _selectedFilter
                             ? KSelectedChipColor
                             : KChipColor,
                       ),
@@ -86,7 +89,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: availableProducts.length,
+                itemCount: filteredListOfAvailableProducts.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(22.0),
@@ -96,19 +99,22 @@ class _HomePageState extends State<HomePage> {
                           MaterialPageRoute(
                             builder: (context) {
                               return ProductDetailsPage(
-                                product: availableProducts[index],
+                                product: filteredListOfAvailableProducts[index],
                               );
                             },
                           ),
                         );
                       },
                       child: ProductCard(
-                        title: availableProducts[index].title,
-                        price: availableProducts[index].price.toString(),
+                        title: filteredListOfAvailableProducts[index].title,
+                        price: filteredListOfAvailableProducts[index]
+                            .price
+                            .toString(),
                         color: index.isEven
                             ? KProductCardBlueColor
                             : KProductCardWhiteColor,
-                        imagePath: availableProducts[index].imagePath,
+                        imagePath:
+                            filteredListOfAvailableProducts[index].imagePath,
                       ),
                     ),
                   );
@@ -119,5 +125,17 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  List<Product> getFilteredListOfAvailableProducts() {
+    if (filters[_selectedFilter].toLowerCase() == "all")
+      return availableProducts;
+    return availableProducts
+        .where(
+          (i) => (i.title.toLowerCase().contains(
+                filters[_selectedFilter].toLowerCase(),
+              )),
+        )
+        .toList();
   }
 }
