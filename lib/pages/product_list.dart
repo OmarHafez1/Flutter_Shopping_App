@@ -1,35 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/data/available_products.dart';
+import 'package:shopping_app/data/item.dart';
+import 'package:shopping_app/selected_items.dart';
 
 class ProductList extends StatefulWidget {
-  const ProductList({super.key});
+  ProductList({super.key});
 
   @override
   State<ProductList> createState() => _ProductListState();
 }
 
 class _ProductListState extends State<ProductList> {
-  var cart = [
-    availableProducts[0],
-    availableProducts[1],
-    availableProducts[4],
-    availableProducts[5],
-    availableProducts[6],
-    availableProducts[8],
-    availableProducts[0],
-    availableProducts[1],
-    availableProducts[4],
-    availableProducts[5],
-    availableProducts[6],
-    availableProducts[8],
-    availableProducts[0],
-    availableProducts[1],
-    availableProducts[4],
-    availableProducts[5],
-    availableProducts[6],
-    availableProducts[8],
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,22 +20,74 @@ class _ProductListState extends State<ProductList> {
         title: Text("Cart"),
       ),
       body: ListView.builder(
-        itemCount: cart.length,
+        itemCount: context.watch<SelectedItems>().selectedItemsLength,
         itemBuilder: (context, index) {
           return ListTile(
-            trailing: Icon(
-              Icons.delete,
-              color: Colors.red,
+            trailing: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Delete Item"),
+                      content:
+                          Text("Are sure that you want to delete this item?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "No",
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Provider.of<SelectedItems>(context, listen: false)
+                                .deleteItem(
+                              context
+                                  .read<SelectedItems>()
+                                  .getSelectedItemAt(index),
+                            );
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Yes",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                    ;
+                  },
+                );
+              },
+              child: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
             ),
             leading: CircleAvatar(
               radius: 45,
-              backgroundImage: AssetImage(cart[index].imagePath),
+              backgroundImage: AssetImage(
+                context
+                    .watch<SelectedItems>()
+                    .getSelectedItemAt(index)
+                    .imagePath,
+              ),
             ),
             title: Text(
-              cart[index].title,
+              context.watch<SelectedItems>().getSelectedItemAt(index).title,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            subtitle: Text("Size: ${cart[index].sizes[0]}"),
+            subtitle: Text(
+                "Size: ${context.watch<SelectedItems>().getSelectedItemAt(index).size}"),
           );
         },
       ),

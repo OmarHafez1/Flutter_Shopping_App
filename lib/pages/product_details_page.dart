@@ -39,8 +39,7 @@ class ProductDetailsPage extends StatelessWidget {
             Expanded(
               flex: 2,
               child: BottomCard(
-                price: product.price.toString(),
-                sizes: product.sizes,
+                product,
               ),
             ),
           ],

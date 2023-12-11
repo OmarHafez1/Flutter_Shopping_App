@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_app/data/item.dart';
+import 'package:shopping_app/data/product.dart';
 import 'package:shopping_app/reusable_widgets/wide_button.dart';
 import 'package:shopping_app/constants.dart';
-
-int _selectedSize = -1;
+import 'package:shopping_app/selected_items.dart';
 
 class BottomCard extends StatefulWidget {
-  String price;
-  List<num> sizes;
-  BottomCard({
-    required this.price,
-    required this.sizes,
+  Product _product;
+  BottomCard(
+    this._product, {
     super.key,
   });
 
@@ -18,6 +18,7 @@ class BottomCard extends StatefulWidget {
 }
 
 class _BottomCardState extends State<BottomCard> {
+  int _selectedSize = -1;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,14 +35,14 @@ class _BottomCardState extends State<BottomCard> {
         child: Column(
           children: [
             Text(
-              "\$${widget.price}",
+              "\$${widget._product.price}",
               style: KTitleTextStyle,
             ),
             SizedBox(
               height: 80,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: widget.sizes.length,
+                itemCount: widget._product.sizes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8),
@@ -49,7 +50,8 @@ class _BottomCardState extends State<BottomCard> {
                       onTap: () {
                         setState(
                           () {
-                            _selectedSize = index;
+                            _selectedSize =
+                                (_selectedSize == index ? -1 : index);
                           },
                         );
                       },
@@ -59,7 +61,7 @@ class _BottomCardState extends State<BottomCard> {
                               ? KSelectedChipColor
                               : KChipColor,
                         ),
-                        label: Text(widget.sizes[index].toString()),
+                        label: Text(widget._product.sizes[index].toString()),
                       ),
                     ),
                   );
@@ -71,7 +73,33 @@ class _BottomCardState extends State<BottomCard> {
               child: WideButton(
                 text: "Add To Cart",
                 icon: Icons.shopping_cart_outlined,
-                onPressed: () {},
+                onPressed: () {
+                  if (_selectedSize == -1) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            const Text('Please select the size of the item'),
+                      ),
+                    );
+                  } else {
+                    Provider.of<SelectedItems>(
+                      context,
+                      listen: false,
+                    ).addItem(
+                      Item(
+                        widget._product,
+                        widget._product.sizes[_selectedSize],
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            const Text('Item added to the cart successfully'),
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  }
+                },
               ),
             )
           ],
